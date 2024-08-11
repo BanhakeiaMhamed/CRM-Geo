@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+
+        <!-- Appender pour un fichier de log -->
+        <File name="File" fileName="logs/app.log">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </File>
+    </Appenders>
+
+    <Loggers>
+        <!-- Configuration par défaut pour tous les loggers -->
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="File"/>
+        </Root>
+
+        <!-- Configuration spécifique pour un logger -->
+        <Logger name="com.example.myapp" level="debug">
+            <AppenderRef ref="Console"/>
+        </Logger>
+
+        <!-- Désactiver le log pour un package particulier -->
+        <Logger name="org.springframework.boot" level="off"/>
+    </Loggers>
+</Configuration>

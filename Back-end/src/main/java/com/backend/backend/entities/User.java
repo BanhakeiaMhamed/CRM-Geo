@@ -7,7 +7,7 @@ import lombok.experimental.SuperBuilder;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.hibernate.annotations.NotFound;
 
-
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -16,6 +16,7 @@ import org.hibernate.annotations.NotFound;
 @Table(name = "users")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.STRING)
+@Setter
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
