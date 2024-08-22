@@ -13,6 +13,8 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @DiscriminatorValue("ENGINEER")
+@Setter
+@Getter
 public class Engineer extends User {
 
     @OneToMany(mappedBy = "engineer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

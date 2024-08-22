@@ -14,6 +14,8 @@ import lombok.*;
 @NoArgsConstructor
 @Table(name="clients")
 @DiscriminatorValue("PROFESIONEL")
+@Getter
+@Setter
 public class Profesionnel extends Client {
     @Column(nullable = false)
     private String companyName;

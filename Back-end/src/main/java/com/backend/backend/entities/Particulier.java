@@ -14,6 +14,8 @@ import lombok.experimental.SuperBuilder;
 @Entity
 @Table(name = "clients")
 @DiscriminatorValue("PARTICULIERS")
+@Getter
+@Setter
 public class Particulier extends Client {
 
     @Column(nullable = false)
