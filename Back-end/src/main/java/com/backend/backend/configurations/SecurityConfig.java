@@ -39,14 +39,14 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        http.authorizeHttpRequests(request -> request.requestMatchers("/").permitAll()
-                        .requestMatchers("/login").permitAll()
-                        .requestMatchers("/register").permitAll()
-                        .requestMatchers("/admin/*").hasRole("ADMIN")
-                        .requestMatchers("/user/*").hasAnyRole("ADMIN", "USER")
-                        .anyRequest()
-                        .authenticated())
-                .oauth2Login(oauth -> oauth.redirectionEndpoint(endPoint -> endPoint.baseUri("/login/oauth/code/cognito"))
+        http.authorizeHttpRequests(request ->
+                        request.requestMatchers("/public/*").permitAll()
+                                .requestMatchers("/admin/*").hasRole("ADMIN")
+                                .requestMatchers("/user/*").hasAnyRole("ADMIN", "USER")
+                                .anyRequest()
+                                .authenticated())
+                .oauth2Login(oauth ->
+                         oauth.redirectionEndpoint(endPoint -> endPoint.baseUri("/login/oauth/code/cognito"))
                         .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig.userAuthoritiesMapper(userAuthoritiesMapper()))
                         .successHandler(customizeAuthenticationSuccessHandler))
                 .logout(httpSecurityLogoutConfigurer -> {

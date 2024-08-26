@@ -31,7 +31,7 @@ public class CustomizeAuthenticationSuccessHandler implements AuthenticationSucc
                 response.sendRedirect("/admin/greetMe");
             } else if ("ROLE_USER".equals(auth.getAuthority())) {
                 System.out.println(userAttributes.get("cognito:username") + " Is User!");
-                response.sendRedirect("/user/greetMe");
+                response.sendRedirect("http://localhost:4200/home");
             }
         }
     }
