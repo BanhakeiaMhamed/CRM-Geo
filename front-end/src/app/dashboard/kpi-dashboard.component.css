@@ -1,0 +1,394 @@
+.dashboard-page {
+  min-height: calc(100vh - 56px);
+  background: #f5f6fa;
+}
+
+.section-title {
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.kpi-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.25rem 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  text-align: center;
+  border-top: 3px solid #3949ab;
+  height: 100%;
+}
+
+.kpi-value {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.kpi-label {
+  color: #666;
+  margin-top: 0.25rem;
+  font-size: 0.85rem;
+}
+
+.chart-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.chart-subtitle {
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.bar-row,
+.engineer-bar-row {
+  display: grid;
+  grid-template-columns: 130px 1fr 80px;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.engineer-bar-row {
+  grid-template-columns: 180px 1fr 90px;
+}
+
+.bar-label {
+  font-size: 0.85rem;
+  color: #444;
+}
+
+.bar-track {
+  background: #eee;
+  border-radius: 4px;
+  height: 12px;
+  overflow: hidden;
+}
+
+.engineer-track {
+  height: 16px;
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  min-width: 2px;
+  transition: width 0.3s;
+}
+
+.engineer-fill {
+  border-radius: 4px;
+}
+
+.bar-count {
+  font-weight: 600;
+  text-align: right;
+  font-size: 0.9rem;
+}
+
+.engineer-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.engineer-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.engineer-name {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.empty-benefits {
+  text-align: center;
+  color: #888;
+  padding: 1.5rem;
+}
+
+.month-chart {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-end;
+  min-height: 200px;
+  padding: 1rem 0;
+  overflow-x: auto;
+}
+
+.month-col {
+  flex: 1;
+  min-width: 52px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.month-stack-wrap {
+  height: 140px;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.month-stack {
+  width: 36px;
+  min-height: 4px;
+  display: flex;
+  flex-direction: column-reverse;
+  border-radius: 4px 4px 0 0;
+  overflow: hidden;
+  transition: height 0.3s;
+}
+
+.month-segment {
+  width: 100%;
+  min-height: 0;
+}
+
+.month-label {
+  font-size: 0.75rem;
+  color: #666;
+  margin-top: 0.5rem;
+}
+
+.month-total {
+  font-size: 0.7rem;
+  color: #888;
+  margin-top: 0.15rem;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
+}
+
+.engineer-chart-card {
+  overflow: visible;
+}
+
+.engineer-click-target {
+  cursor: pointer;
+  transition: background 0.15s;
+  user-select: none;
+}
+
+.engineer-bar-row.engineer-click-target {
+  padding: 0.5rem 0.35rem;
+  margin-left: -0.35rem;
+  margin-right: -0.35rem;
+  border-radius: 8px;
+}
+
+.engineer-bar-row--active,
+.legend-item--active {
+  background: rgba(57, 73, 171, 0.08);
+  outline: 2px solid rgba(57, 73, 171, 0.35);
+  outline-offset: 1px;
+}
+
+.engineer-synthesis-panel {
+  margin: 1rem 0 1.5rem;
+  padding: 1.25rem;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(57, 73, 171, 0.15);
+  border: 1px solid #e8eaf0;
+  animation: panelFadeIn 0.2s ease-out;
+  position: relative;
+}
+
+.synthesis-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  border: none;
+  background: #f0f0f0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  line-height: 1;
+  color: #666;
+  cursor: pointer;
+}
+
+.synthesis-close:hover {
+  background: #e0e0e0;
+  color: #333;
+}
+
+.synthesis-sticky {
+  position: sticky;
+  top: 70px;
+  z-index: 100;
+}
+
+.synthesis-hint {
+  margin-top: 1rem;
+  text-align: center;
+  color: #999;
+  font-size: 0.85rem;
+  padding: 0.75rem;
+  background: #fafafa;
+  border-radius: 8px;
+  border: 1px dashed #ddd;
+}
+
+@keyframes panelFadeIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.synthesis-header {
+  border-left: 4px solid #3949ab;
+  padding-left: 0.75rem;
+  margin-bottom: 0.85rem;
+}
+
+.synthesis-name {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #222;
+}
+
+.synthesis-email {
+  font-size: 0.78rem;
+  color: #888;
+}
+
+.synthesis-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin-bottom: 0.85rem;
+}
+
+.synthesis-stat {
+  background: #f5f6fa;
+  border-radius: 8px;
+  padding: 0.5rem;
+  text-align: center;
+}
+
+.stat-num {
+  display: block;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #3949ab;
+}
+
+.stat-lbl {
+  display: block;
+  font-size: 0.7rem;
+  color: #666;
+  margin-top: 0.1rem;
+}
+
+.synthesis-section-title {
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #666;
+  margin-bottom: 0.5rem;
+}
+
+.synthesis-reports {
+  max-height: 220px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.synthesis-report {
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 0.55rem 0.65rem;
+  background: #fafafa;
+}
+
+.report-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.report-ref {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #888;
+}
+
+.report-status {
+  font-size: 0.68rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.status-envoye {
+  background: #e0f2f1;
+  color: #00695c;
+}
+
+.status-cloture {
+  background: #eceff1;
+  color: #455a64;
+}
+
+.report-title {
+  font-size: 0.82rem;
+  font-weight: 500;
+  margin: 0.25rem 0;
+  color: #333;
+}
+
+.report-footer {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: #666;
+}
+
+.synthesis-empty {
+  font-size: 0.82rem;
+  color: #999;
+  text-align: center;
+  padding: 0.75rem;
+  background: #f9f9f9;
+  border-radius: 8px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  color: #444;
+  position: relative;
+}
+
+@media (max-width: 992px) {
+  .bar-row,
+  .engineer-bar-row {
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
+  }
+
+  .bar-count {
+    text-align: left;
+  }
+}

@@ -1,0 +1,187 @@
+<div class="dashboard-page">
+  <div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h1 class="mb-1">Dashboard KPI</h1>
+        <p class="text-muted mb-0" *ngIf="overview">{{ overview.enterpriseName }} · {{ currentYear }}</p>
+      </div>
+      <a routerLink="/home" class="btn btn-outline-secondary btn-sm">← Accueil</a>
+    </div>
+
+    <div class="alert alert-danger" *ngIf="error">{{ error }}</div>
+
+    <div class="text-center py-5" *ngIf="loading">
+      <div class="spinner-border text-primary"></div>
+    </div>
+
+    <ng-container *ngIf="!loading && overview && benefits">
+      <section class="mb-4">
+        <h5 class="section-title">Rapports par statut</h5>
+        <div class="row g-3 mb-3">
+          <div class="col" *ngFor="let status of statusKeys">
+            <div class="kpi-card" [style.border-top-color]="statusColors[status]">
+              <div class="kpi-value" [style.color]="statusColors[status]">{{ count(status) }}</div>
+              <div class="kpi-label">{{ statusLabels[status] }}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <h6 class="chart-subtitle">Repartition par statut</h6>
+          <div class="bar-row" *ngFor="let status of statusKeys">
+            <div class="bar-label">{{ statusLabels[status] }}</div>
+            <div class="bar-track">
+              <div class="bar-fill" [style.width]="barWidth(status)" [style.background]="statusColors[status]"></div>
+            </div>
+            <div class="bar-count">{{ count(status) }}</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="mb-4">
+        <h5 class="section-title">Benefice genere par ingenieur — {{ periodLabel() }}</h5>
+        <div class="d-flex flex-wrap gap-2 mb-3 align-items-center">
+          <select class="form-select form-select-sm w-auto" [(ngModel)]="periodFilter" (change)="onPeriodChange()">
+            <option value="ANNEE">Annee complete</option>
+            <option value="MENSUEL">Mois</option>
+            <option value="TRIMESTRIEL">Trimestre</option>
+          </select>
+          <select *ngIf="periodFilter === 'MENSUEL'" class="form-select form-select-sm w-auto"
+                  [(ngModel)]="periodNumber" (change)="onPeriodChange()">
+            <option *ngFor="let m of months; let i = index" [ngValue]="m">{{ monthLabels[i] }}</option>
+          </select>
+          <select *ngIf="periodFilter === 'TRIMESTRIEL'" class="form-select form-select-sm w-auto"
+                  [(ngModel)]="periodNumber" (change)="onPeriodChange()">
+            <option [ngValue]="1">T1 (Jan-Mar)</option>
+            <option [ngValue]="2">T2 (Avr-Juin)</option>
+            <option [ngValue]="3">T3 (Juil-Sep)</option>
+            <option [ngValue]="4">T4 (Oct-Dec)</option>
+          </select>
+        </div>
+        <p class="text-muted small mb-3">Cliquez sur un ingenieur pour voir sa synthese</p>
+        <div class="chart-card engineer-chart-card">
+          <div class="engineer-bar-row engineer-click-target"
+               *ngFor="let engineer of benefits.engineers; let i = index"
+               [class.engineer-bar-row--active]="isCardVisible(engineer)"
+               (click)="toggleEngineerCard(engineer, i)"
+               role="button"
+               tabindex="0"
+               (keydown.enter)="toggleEngineerCard(engineer, i)"
+               (keydown.space)="$event.preventDefault(); toggleEngineerCard(engineer, i)">
+            <div class="engineer-info">
+              <span class="engineer-dot" [style.background]="engineerColors[i % engineerColors.length]"></span>
+              <span class="engineer-name">{{ engineerName(engineer) }}</span>
+            </div>
+            <div class="bar-track engineer-track">
+              <div class="bar-fill engineer-fill"
+                   [style.width]="engineerBarWidth(engineer.totalRevenue)"
+                   [style.background]="engineerColors[i % engineerColors.length]">
+              </div>
+            </div>
+            <div class="bar-count">{{ engineer.totalRevenue | number:'1.0-0' }} €</div>
+          </div>
+
+          <div class="empty-benefits" *ngIf="benefits.engineers.length === 0">
+            Aucun benefice enregistre pour cette annee.
+          </div>
+
+          <div class="synthesis-hint" *ngIf="!selectedEngineer && benefits.engineers.length > 0">
+            Cliquez sur un nom d'ingenieur ci-dessus
+          </div>
+        </div>
+      </section>
+
+      <div class="engineer-synthesis-panel synthesis-sticky" *ngIf="selectedEngineer as engineer">
+        <button type="button" class="synthesis-close" (click)="closeEngineerCard()" aria-label="Fermer">×</button>
+        <ng-container *ngTemplateOutlet="synthesisCard; context: {
+          engineer: engineer,
+          color: engineerColors[selectedEngineerIndex % engineerColors.length]
+        }"></ng-container>
+      </div>
+
+      <section>
+        <h5 class="section-title">Evolution mensuelle du benefice</h5>
+        <div class="chart-card">
+          <div class="month-chart">
+            <div class="month-col" *ngFor="let month of months; let mi = index">
+              <div class="month-stack-wrap">
+                <div class="month-stack" [style.height.%]="monthStackHeight(month)">
+                  <div class="month-segment"
+                       *ngFor="let engineer of benefits.engineers; let i = index"
+                       [style.height]="segmentHeight(engineer, month)"
+                       [style.background]="engineerColors[i % engineerColors.length]">
+                  </div>
+                </div>
+              </div>
+              <div class="month-label">{{ monthLabels[mi] }}</div>
+              <div class="month-total">{{ monthTotal(month) | number:'1.0-0' }} €</div>
+            </div>
+          </div>
+
+          <div class="legend">
+            <span class="legend-item engineer-click-target"
+                  *ngFor="let engineer of benefits.engineers; let i = index"
+                  [class.legend-item--active]="isCardVisible(engineer)"
+                  (click)="toggleEngineerCard(engineer, i)"
+                  role="button"
+                  tabindex="0"
+                  (keydown.enter)="toggleEngineerCard(engineer, i)"
+                  (keydown.space)="$event.preventDefault(); toggleEngineerCard(engineer, i)">
+              <span class="engineer-dot" [style.background]="engineerColors[i % engineerColors.length]"></span>
+              {{ engineerName(engineer) }}
+            </span>
+          </div>
+        </div>
+      </section>
+    </ng-container>
+  </div>
+</div>
+
+<ng-template #synthesisCard let-engineer="engineer" let-color="color">
+  <div class="synthesis-header" [style.border-left-color]="color">
+    <div class="synthesis-name">{{ engineerName(engineer) }}</div>
+    <div class="synthesis-email">{{ engineer.email }}</div>
+  </div>
+
+  <div class="synthesis-stats">
+    <div class="synthesis-stat">
+      <span class="stat-num">{{ engineer.totalRevenue | number:'1.0-0' }} €</span>
+      <span class="stat-lbl">Benefice {{ currentYear }}</span>
+    </div>
+    <div class="synthesis-stat">
+      <span class="stat-num">{{ engineer.sentReportsCount ?? 0 }}</span>
+      <span class="stat-lbl">Envoyes</span>
+    </div>
+    <div class="synthesis-stat">
+      <span class="stat-num">{{ engineer.closedReportsCount ?? 0 }}</span>
+      <span class="stat-lbl">Factures / clotures</span>
+    </div>
+    <div class="synthesis-stat">
+      <span class="stat-num">{{ engineer.activeReportsCount ?? 0 }}</span>
+      <span class="stat-lbl">En cours</span>
+    </div>
+  </div>
+
+  <div class="synthesis-section-title">Rapports envoyes et factures</div>
+
+  <div class="synthesis-reports" *ngIf="engineer.invoicedReports?.length; else noReports">
+    <div class="synthesis-report" *ngFor="let report of engineer.invoicedReports">
+      <div class="report-main">
+        <span class="report-ref">{{ report.reference }}</span>
+        <span class="report-status" [class.status-envoye]="report.status === 'ENVOYE'"
+              [class.status-cloture]="report.status === 'CLOTURE'">
+          {{ statusLabel(report.status) }}
+        </span>
+      </div>
+      <div class="report-title">{{ report.title }}</div>
+      <div class="report-footer">
+        <span>{{ formatDate(report.sentAt) }}</span>
+        <strong>{{ report.revenueAmount | number:'1.0-0' }} €</strong>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #noReports>
+    <div class="synthesis-empty">Aucun rapport envoye ou facture en {{ currentYear }}.</div>
+  </ng-template>
+</ng-template>

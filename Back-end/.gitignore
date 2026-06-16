@@ -42,3 +42,7 @@ build/
 *.pid
 *.swp
 *.tmp
+
+# Firebase Admin credentials
+src/main/resources/firebase-service-account.json
+src/main/resources/crm-geo.json

@@ -1,0 +1,101 @@
+<div class="kanban-page">
+  <div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div>
+        <h1 class="mb-1">Tableau Kanban</h1>
+        <p class="text-muted mb-0">Glissez-deposez une carte entre colonnes ou utilisez les boutons d'action</p>
+      </div>
+      <a routerLink="/home" class="btn btn-outline-secondary btn-sm">← Accueil</a>
+    </div>
+
+    <div class="kanban-hint alert alert-info py-2" *ngIf="dropHint">{{ dropHint }}</div>
+
+    <div class="alert alert-danger" *ngIf="error">{{ error }}</div>
+
+    <div class="text-center py-5" *ngIf="loading">
+      <div class="spinner-border text-primary"></div>
+    </div>
+
+    <div class="kanban-board" *ngIf="!loading && !error">
+      <div
+        class="kanban-column"
+        *ngFor="let col of columns"
+        cdkDropList
+        [id]="col"
+        [cdkDropListData]="columnLists[col]"
+        [cdkDropListConnectedTo]="columns"
+        (cdkDropListDropped)="onDrop($event)"
+        [class.kanban-column--dragging]="draggingFrom !== null"
+        [class.kanban-column--valid-target]="isValidDropTarget(col)"
+        [class.kanban-column--invalid-target]="draggingFrom !== null && !isValidDropTarget(col) && draggingFrom !== col"
+        [style.--column-color]="columnColors[col]"
+      >
+        <div class="kanban-column-header">
+          <span class="kanban-column-title">{{ statusLabels[col] }}</span>
+          <span class="badge rounded-pill">{{ columnLists[col].length }}</span>
+        </div>
+
+        <div class="kanban-cards">
+          <div
+            class="kanban-card"
+            *ngFor="let report of columnLists[col]"
+            cdkDrag
+            [cdkDragDisabled]="!canDragFrom(col) || actionLoading === report.reference"
+            (cdkDragStarted)="onDragStarted(col)"
+            (cdkDragEnded)="onDragEnded()"
+          >
+            <div class="kanban-card-handle" cdkDragHandle title="Glisser pour deplacer">
+              ⠿
+            </div>
+
+            <div class="kanban-card-body">
+              <div class="kanban-card-ref">{{ report.reference }}</div>
+              <div class="kanban-card-title">{{ report.title }}</div>
+              <div class="kanban-card-type">{{ typeLabels[report.reportType] }}</div>
+              <div class="kanban-card-revenue" *ngIf="report.revenueAmount">
+                {{ report.revenueAmount | number:'1.0-0' }} €
+              </div>
+              <div class="kanban-tags" *ngIf="report.tags?.length">
+                <span class="tag" *ngFor="let tag of report.tags">{{ tag }}</span>
+              </div>
+            </div>
+
+            <div class="kanban-actions">
+              <button *ngIf="col === 'EN_COURS'" class="btn btn-sm btn-primary w-100"
+                      [disabled]="actionLoading === report.reference"
+                      (click)="submitForValidation(report)">
+                Soumettre validation
+              </button>
+              <button *ngIf="col === 'EN_VALIDATION'" class="btn btn-sm btn-success w-100 mb-1"
+                      [disabled]="actionLoading === report.reference"
+                      (click)="validate(report)">
+                Valider
+              </button>
+              <button *ngIf="col === 'EN_VALIDATION'" class="btn btn-sm btn-warning w-100"
+                      [disabled]="actionLoading === report.reference"
+                      (click)="requestRectification(report)">
+                Rectifier
+              </button>
+              <button *ngIf="col === 'EN_RECTIFICATION'" class="btn btn-sm btn-primary w-100"
+                      [disabled]="actionLoading === report.reference"
+                      (click)="resumeAfterRectification(report)">
+                Reprendre
+              </button>
+              <button *ngIf="col === 'ENVOYE'" class="btn btn-sm btn-secondary w-100"
+                      [disabled]="actionLoading === report.reference"
+                      (click)="closeReport(report)">
+                Cloturer
+              </button>
+            </div>
+
+            <div class="cdk-drag-placeholder" *cdkDragPlaceholder></div>
+          </div>
+
+          <div class="kanban-empty" *ngIf="columnLists[col].length === 0">
+            Deposez un rapport ici
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

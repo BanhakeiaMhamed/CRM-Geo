@@ -1,0 +1,92 @@
+<div class="home-page">
+  <div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h1 class="mb-1">Bonjour {{ profile?.firstName ?? '...' }} 👋</h1>
+        <p class="text-muted mb-0" *ngIf="profile">
+          {{ profile.enterpriseName }} · {{ profile.role }}
+        </p>
+      </div>
+    </div>
+
+    <div class="alert alert-danger" *ngIf="error">{{ error }}</div>
+    <div class="text-center py-5" *ngIf="loading">
+      <div class="spinner-border text-primary" role="status"></div>
+      <p class="mt-2 text-muted">Chargement...</p>
+    </div>
+
+    <ng-container *ngIf="!loading && !error">
+      <div class="row g-3 mb-4" *ngIf="overview">
+        <div class="col-md-3 col-6">
+          <div class="stat-card stat-primary">
+            <div class="stat-value">{{ overview.totalReports }}</div>
+            <div class="stat-label">Rapports total</div>
+          </div>
+        </div>
+        <div class="col-md-3 col-6">
+          <div class="stat-card stat-warning">
+            <div class="stat-value">{{ overview.reportsByStatus['EN_COURS'] ?? 0 }}</div>
+            <div class="stat-label">En cours</div>
+          </div>
+        </div>
+        <div class="col-md-3 col-6">
+          <div class="stat-card stat-info">
+            <div class="stat-value">{{ overview.reportsByStatus['EN_VALIDATION'] ?? 0 }}</div>
+            <div class="stat-label">En validation</div>
+          </div>
+        </div>
+        <div class="col-md-3 col-6">
+          <div class="stat-card stat-success">
+            <div class="stat-value">{{ overview.reportsByStatus['ENVOYE'] ?? 0 }}</div>
+            <div class="stat-label">Envoyes</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-3">
+        <div class="col-md-4">
+          <a routerLink="/kanban" class="nav-card">
+            <div class="nav-card-icon">📋</div>
+            <h3>Mon tableau Kanban</h3>
+            <p>Gerez vos rapports — glisser-deposer et workflow complet jusqu'a cloture.</p>
+          </a>
+        </div>
+        <div class="col-md-4">
+          <a routerLink="/reports/new" class="nav-card">
+            <div class="nav-card-icon">➕</div>
+            <h3>Nouveau rapport</h3>
+            <p>Creer un rapport et le demarrer dans le workflow.</p>
+          </a>
+        </div>
+        <div class="col-md-4">
+          <a routerLink="/time" class="nav-card">
+            <div class="nav-card-icon">⏱</div>
+            <h3>Suivi du temps</h3>
+            <p>Saisir les heures passees sur vos rapports.</p>
+          </a>
+        </div>
+        <div class="col-md-4">
+          <a routerLink="/clients" class="nav-card">
+            <div class="nav-card-icon">👥</div>
+            <h3>Clients</h3>
+            <p>Particuliers et professionnels du bureau.</p>
+          </a>
+        </div>
+        <div class="col-md-4">
+          <a routerLink="/engineers" class="nav-card">
+            <div class="nav-card-icon">🧑‍💼</div>
+            <h3>Equipe RH</h3>
+            <p>Rattacher les ingenieurs du bureau d'etude.</p>
+          </a>
+        </div>
+        <div class="col-md-4">
+          <a routerLink="/dashboard" class="nav-card">
+            <div class="nav-card-icon">📊</div>
+            <h3>Dashboard KPI</h3>
+            <p>Benefices par ingenieur avec filtre mois ou trimestre.</p>
+          </a>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

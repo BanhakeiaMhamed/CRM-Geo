@@ -37,3 +37,46 @@ databaseChangeLog:
                   type: varchar(15)
                   constraints:
                     nullable: false
+  - changeSet:
+      id: fix-users-duplicate-name-columns
+      author: crm-geo
+      preConditions:
+        - onFail: MARK_RAN
+        - columnExists:
+            tableName: users
+            columnName: firstName
+      changes:
+        - sql:
+            sql: UPDATE users SET first_name = "firstName" WHERE first_name IS NULL AND "firstName" IS NOT NULL
+        - sql:
+            sql: UPDATE users SET last_name = "lastName" WHERE last_name IS NULL AND "lastName" IS NOT NULL
+        - dropColumn:
+            tableName: users
+            columnName: firstName
+        - dropColumn:
+            tableName: users
+            columnName: lastName
+  - changeSet:
+      id: fix-clients-null-columns-v2
+      author: crm-geo
+      preConditions:
+        - onFail: MARK_RAN
+        - tableExists:
+            tableName: clients
+      changes:
+        - sql:
+            sql: ALTER TABLE clients ALTER COLUMN company_name DROP NOT NULL
+        - sql:
+            sql: ALTER TABLE clients ALTER COLUMN siren DROP NOT NULL
+        - sql:
+            sql: ALTER TABLE clients ALTER COLUMN siret DROP NOT NULL
+        - sql:
+            sql: ALTER TABLE clients ALTER COLUMN company_type DROP NOT NULL
+        - sql:
+            sql: ALTER TABLE clients ALTER COLUMN first_name DROP NOT NULL
+        - sql:
+            sql: ALTER TABLE clients ALTER COLUMN last_name DROP NOT NULL
+        - sql:
+            sql: ALTER TABLE clients ALTER COLUMN client_kind DROP NOT NULL
+        - sql:
+            sql: UPDATE clients SET client_kind = dtype WHERE client_kind IS NULL AND dtype IS NOT NULL

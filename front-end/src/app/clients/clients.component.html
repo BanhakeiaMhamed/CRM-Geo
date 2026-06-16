@@ -1,0 +1,69 @@
+﻿<div class="page">
+  <div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h1 class="mb-1">Clients</h1>
+        <p class="text-muted mb-0">Gestion des clients particuliers et professionnels</p>
+      </div>
+      <a routerLink="/home" class="btn btn-outline-secondary btn-sm">← Accueil</a>
+    </div>
+
+    <div class="alert alert-danger" *ngIf="error">{{ error }}</div>
+    <div class="alert alert-success" *ngIf="success">{{ success }}</div>
+
+    <div class="row g-4">
+      <div class="col-lg-5">
+        <div class="card-form">
+          <h5 class="mb-3">Nouveau client</h5>
+          <div class="btn-group mb-3 w-100">
+            <button type="button" class="btn btn-sm"
+                    [class.btn-primary]="clientKind === 'PARTICULIER'"
+                    [class.btn-outline-primary]="clientKind !== 'PARTICULIER'"
+                    (click)="clientKind = 'PARTICULIER'">Particulier</button>
+            <button type="button" class="btn btn-sm"
+                    [class.btn-primary]="clientKind === 'PROFESSIONAL'"
+                    [class.btn-outline-primary]="clientKind !== 'PROFESSIONAL'"
+                    (click)="clientKind = 'PROFESSIONAL'">Professionnel</button>
+          </div>
+
+          <form *ngIf="clientKind === 'PARTICULIER'" [formGroup]="particulierForm" (ngSubmit)="submit()">
+            <input class="form-control mb-2" placeholder="Prenom" formControlName="firstName">
+            <input class="form-control mb-2" placeholder="Nom" formControlName="lastName">
+            <input class="form-control mb-2" placeholder="Email" formControlName="email">
+            <input class="form-control mb-3" placeholder="Telephone" formControlName="phone">
+            <button class="btn btn-primary" type="submit" [disabled]="saving">Creer</button>
+          </form>
+
+          <form *ngIf="clientKind === 'PROFESSIONAL'" [formGroup]="profesionnelForm" (ngSubmit)="submit()">
+            <input class="form-control mb-2" placeholder="Raison sociale" formControlName="companyName">
+            <input class="form-control mb-2" placeholder="SIREN" formControlName="siren">
+            <input class="form-control mb-2" placeholder="SIRET" formControlName="siret">
+            <input class="form-control mb-2" placeholder="Forme juridique" formControlName="companyType">
+            <input class="form-control mb-2" placeholder="Email" formControlName="email">
+            <input class="form-control mb-3" placeholder="Telephone" formControlName="phone">
+            <button class="btn btn-primary" type="submit" [disabled]="saving">Creer</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="col-lg-7">
+        <div class="card-form">
+          <h5 class="mb-3">Liste ({{ clients.length }})</h5>
+          <div *ngIf="loading" class="text-center py-4"><div class="spinner-border"></div></div>
+          <div class="client-row" *ngFor="let c of clients">
+            <div>
+              <strong>{{ c.displayName }}</strong>
+              <div class="text-muted small">
+                {{ c.clientType === 'PARTICULIER' ? 'Particulier' : 'Professionnel' }}
+                · {{ c.email }}
+                <span *ngIf="c.phone"> · {{ c.phone }}</span>
+              </div>
+            </div>
+            <button class="btn btn-sm btn-outline-danger" (click)="remove(c)">Supprimer</button>
+          </div>
+          <p class="text-muted mb-0" *ngIf="!loading && clients.length === 0">Aucun client.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

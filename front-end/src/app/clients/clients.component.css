@@ -1,0 +1,4 @@
+﻿.page { min-height: calc(100vh - 56px); background: #f5f6fa; }
+.card-form { background: #fff; border-radius: 12px; padding: 1.25rem; box-shadow: 0 2px 8px rgba(0,0,0,.06); }
+.client-row { display: flex; justify-content: space-between; align-items: center; padding: .75rem 0; border-bottom: 1px solid #eee; }
+.client-row:last-child { border-bottom: none; }

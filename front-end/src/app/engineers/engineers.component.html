@@ -1,0 +1,40 @@
+<div class="page">
+  <div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h1 class="mb-1">Equipe — RH</h1>
+        <p class="text-muted mb-0">Ingenieurs du bureau d'etude</p>
+      </div>
+      <a routerLink="/home" class="btn btn-outline-secondary btn-sm">← Accueil</a>
+    </div>
+
+    <div class="alert alert-danger" *ngIf="error">{{ error }}</div>
+    <div class="alert alert-success" *ngIf="success">{{ success }}</div>
+
+    <div class="row g-4">
+      <div class="col-lg-5">
+        <div class="card-form">
+          <h5 class="mb-3">Rattacher un ingenieur</h5>
+          <form [formGroup]="form" (ngSubmit)="submit()">
+            <input class="form-control mb-2" placeholder="Prenom" formControlName="firstName">
+            <input class="form-control mb-2" placeholder="Nom" formControlName="lastName">
+            <input class="form-control mb-2" placeholder="Email" formControlName="email">
+            <button class="btn btn-primary" type="submit" [disabled]="saving">Rattacher</button>
+          </form>
+        </div>
+      </div>
+      <div class="col-lg-7">
+        <div class="card-form">
+          <h5 class="mb-3">Ingenieurs ({{ engineers.length }})</h5>
+          <div *ngIf="loading" class="text-center py-4"><div class="spinner-border"></div></div>
+          <div class="eng-row" *ngFor="let e of engineers">
+            <div>
+              <strong>{{ e.firstName }} {{ e.lastName }}</strong>
+              <div class="text-muted small">{{ e.email }} · {{ e.role }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

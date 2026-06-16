@@ -1,0 +1,33 @@
+<div class="login-page">
+  <div class="login-card">
+    <h1>Bati Geo CRM</h1>
+    <p class="subtitle">{{ isSignUp ? 'Creer un compte' : 'Connexion ingenieur / gerant' }}</p>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="mb-3" *ngIf="isSignUp">
+        <label class="form-label" for="displayName">Nom complet</label>
+        <input id="displayName" class="form-control" type="text" formControlName="displayName" />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="email">Email</label>
+        <input id="email" class="form-control" type="email" formControlName="email" />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="password">Mot de passe</label>
+        <input id="password" class="form-control" type="password" formControlName="password" />
+      </div>
+
+      <div class="alert alert-danger" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+      <button class="btn btn-primary w-100" type="submit" [disabled]="loading">
+        {{ loading ? 'Chargement...' : (isSignUp ? 'Creer le compte' : 'Se connecter') }}
+      </button>
+    </form>
+
+    <button class="btn btn-link mt-3" type="button" (click)="toggleMode()">
+      {{ isSignUp ? 'Deja un compte ? Se connecter' : 'Pas de compte ? S\'inscrire' }}
+    </button>
+  </div>
+</div>

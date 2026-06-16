@@ -1,3 +1,17 @@
-.custom-red-bg {
-  background-color: #918b8b; /* Rouge vif */
+﻿.custom-red-bg {
+  background: linear-gradient(135deg, #1a237e, #3949ab);
+}
+
+.nav-link-custom {
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  font-size: 0.9rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+.nav-link-custom:hover,
+.nav-active {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.15);
 }

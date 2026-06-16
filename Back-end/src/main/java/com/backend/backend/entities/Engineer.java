@@ -17,6 +17,13 @@ import java.util.Set;
 @Getter
 public class Engineer extends User {
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "enterprise_id", nullable = false)
+    private Enterprise enterprise;
+
     @OneToMany(mappedBy = "engineer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Client> clients;
+
+    @OneToMany(mappedBy = "assignedEngineer", fetch = FetchType.LAZY)
+    private Set<Report> assignedReports;
 }

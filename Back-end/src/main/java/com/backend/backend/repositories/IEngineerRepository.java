@@ -8,4 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IEngineerRepository extends JpaRepository<Engineer, Long> {
+    Optional<Engineer> findByEmail(String email);
+    long countByEnterpriseId(Long enterpriseId);
+    List<Engineer> findByEnterpriseId(Long enterpriseId);
 }

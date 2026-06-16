@@ -24,15 +24,18 @@ public class User {
     private Long id;
 
     @NotNull
+    @Column(name = "first_name", nullable = false)
     private String firstName;
 
     @NotNull
+    @Column(name = "last_name", nullable = false)
     private String lastName;
 
     @NotNull
     private String email;
 
     @NotNull
+    @Column(name = "user_name", nullable = false)
     private String userName;
 
     @NotNull

@@ -1,0 +1,63 @@
+.stat-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border-left: 4px solid #ccc;
+}
+
+.stat-primary { border-left-color: #3949ab; }
+.stat-warning { border-left-color: #fb8c00; }
+.stat-info { border-left-color: #039be5; }
+.stat-success { border-left-color: #43a047; }
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.stat-label {
+  color: #666;
+  margin-top: 0.35rem;
+  font-size: 0.9rem;
+}
+
+.nav-card {
+  display: block;
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.15s, box-shadow 0.15s;
+  height: 100%;
+}
+
+.nav-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(57, 73, 171, 0.15);
+  color: inherit;
+}
+
+.nav-card-icon {
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+.nav-card h3 {
+  font-size: 1.15rem;
+  margin-bottom: 0.5rem;
+}
+
+.nav-card p {
+  color: #666;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.home-page {
+  min-height: calc(100vh - 56px);
+  background: #f5f6fa;
+}
