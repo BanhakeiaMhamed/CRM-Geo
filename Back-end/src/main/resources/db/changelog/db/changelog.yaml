@@ -80,3 +80,89 @@ databaseChangeLog:
             sql: ALTER TABLE clients ALTER COLUMN client_kind DROP NOT NULL
         - sql:
             sql: UPDATE clients SET client_kind = dtype WHERE client_kind IS NULL AND dtype IS NOT NULL
+  - changeSet:
+      id: migrate-report-types-g1-g5
+      author: crm-geo
+      preConditions:
+        - onFail: MARK_RAN
+        - tableExists:
+            tableName: reports
+      changes:
+        - sql:
+            sql: ALTER TABLE reports DROP CONSTRAINT IF EXISTS reports_report_type_check
+        - sql:
+            sql: UPDATE reports SET report_type = 'G1_ES' WHERE report_type = 'ETUDE_GEOTECHNIQUE'
+        - sql:
+            sql: UPDATE reports SET report_type = 'G2_PRO' WHERE report_type = 'ETUDE_STRUCTURE'
+        - sql:
+            sql: UPDATE reports SET report_type = 'G5_DIAGNOSTIC' WHERE report_type IN ('DIAGNOSTIC', 'EXPERTISE')
+        - sql:
+            sql: UPDATE reports SET report_type = 'G3_PHASE_ETUDE' WHERE report_type = 'AUDIT_ENERGETIQUE'
+        - sql:
+            sql: UPDATE reports SET report_type = 'G1_ES' WHERE report_type = 'AUTRE'
+        - sql:
+            sql: ALTER TABLE reports ADD CONSTRAINT reports_report_type_check CHECK (report_type IN ('G1_ES','G1_PGC','G2_AVP','G2_PRO','G2_DCE_ACT','G3_PHASE_ETUDE','G3_PHASE_SUIVI','G4_SUPERVISION_ETUDE','G4_SUPERVISION_SUIVI','G5_DIAGNOSTIC'))
+  - changeSet:
+      id: add-report-location-fields
+      author: crm-geo
+      validCheckSum: ANY
+      preConditions:
+        - onFail: MARK_RAN
+        - tableExists:
+            tableName: reports
+      changes:
+        - sql:
+            splitStatements: false
+            sql: |
+              ALTER TABLE reports ADD COLUMN IF NOT EXISTS address varchar(255);
+              ALTER TABLE reports ADD COLUMN IF NOT EXISTS postal_code varchar(10);
+              ALTER TABLE reports ADD COLUMN IF NOT EXISTS city varchar(100);
+              ALTER TABLE reports ADD COLUMN IF NOT EXISTS latitude double precision;
+              ALTER TABLE reports ADD COLUMN IF NOT EXISTS longitude double precision;
+              ALTER TABLE reports ADD COLUMN IF NOT EXISTS page_count integer DEFAULT 0;
+        - sql:
+            sql: UPDATE reports SET address = '10 rue de la Republique', postal_code = '69002', city = 'Lyon', page_count = COALESCE(page_count, 12), latitude = COALESCE(latitude, 45.7477), longitude = COALESCE(longitude, 4.8265) WHERE address IS NULL OR postal_code IS NULL OR city IS NULL
+        - sql:
+            sql: UPDATE reports SET page_count = 0 WHERE page_count IS NULL
+        - sql:
+            sql: ALTER TABLE reports ALTER COLUMN address SET NOT NULL
+        - sql:
+            sql: ALTER TABLE reports ALTER COLUMN postal_code SET NOT NULL
+        - sql:
+            sql: ALTER TABLE reports ALTER COLUMN city SET NOT NULL
+        - sql:
+            sql: ALTER TABLE reports ALTER COLUMN page_count SET NOT NULL
+  - changeSet:
+      id: repair-report-location-fields-v2
+      author: crm-geo
+      preConditions:
+        - onFail: MARK_RAN
+        - tableExists:
+            tableName: reports
+      changes:
+        - sql:
+            splitStatements: false
+            sql: |
+              ALTER TABLE reports ADD COLUMN IF NOT EXISTS address varchar(255);
+              ALTER TABLE reports ADD COLUMN IF NOT EXISTS postal_code varchar(10);
+              ALTER TABLE reports ADD COLUMN IF NOT EXISTS city varchar(100);
+              ALTER TABLE reports ADD COLUMN IF NOT EXISTS latitude double precision;
+              ALTER TABLE reports ADD COLUMN IF NOT EXISTS longitude double precision;
+              ALTER TABLE reports ADD COLUMN IF NOT EXISTS page_count integer DEFAULT 0;
+        - sql:
+            sql: UPDATE reports SET address = '10 rue de la Republique', postal_code = '69002', city = 'Lyon', page_count = COALESCE(page_count, 12), latitude = COALESCE(latitude, 45.7477), longitude = COALESCE(longitude, 4.8265) WHERE address IS NULL OR postal_code IS NULL OR city IS NULL
+        - sql:
+            sql: UPDATE reports SET page_count = 0 WHERE page_count IS NULL
+  - changeSet:
+      id: add-report-pdf-fields
+      author: crm-geo
+      preConditions:
+        - onFail: MARK_RAN
+        - tableExists:
+            tableName: reports
+      changes:
+        - sql:
+            splitStatements: false
+            sql: |
+              ALTER TABLE reports ADD COLUMN IF NOT EXISTS pdf_file_name varchar(255);
+              ALTER TABLE reports ADD COLUMN IF NOT EXISTS pdf_stored_name varchar(255);

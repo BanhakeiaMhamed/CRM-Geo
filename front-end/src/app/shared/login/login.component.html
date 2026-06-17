@@ -1,6 +1,9 @@
 <div class="login-page">
   <div class="login-card">
-    <h1>Bati Geo CRM</h1>
+    <div class="login-brand">
+      <app-geo-logo size="lg"></app-geo-logo>
+      <h1>GEO CRM</h1>
+    </div>
     <p class="subtitle">{{ isSignUp ? 'Creer un compte' : 'Connexion ingenieur / gerant' }}</p>
 
     <form [formGroup]="form" (ngSubmit)="submit()">

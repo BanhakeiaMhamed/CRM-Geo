@@ -2,7 +2,9 @@ package com.backend.backend.metier.services;
 
 import com.backend.backend.Enums.ReportStatus;
 import com.backend.backend.Enums.ReportType;
+import com.backend.backend.dto.InterventionMapDto;
 import com.backend.backend.dto.ReportDto;
+import com.backend.backend.dto.ReportPdfDownload;
 import com.backend.backend.entities.*;
 import com.backend.backend.exceptions.InvalidWorkflowTransitionException;
 import com.backend.backend.exceptions.ReportNotFoundException;
@@ -11,7 +13,9 @@ import com.backend.backend.repositories.ReportTagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.EnumMap;
@@ -23,6 +27,8 @@ import java.util.Set;
 @Service
 @RequiredArgsConstructor
 public class ReportWorkflowService {
+
+    public static final int MIN_PAGES_FOR_VALIDATION = 10;
 
     private static final Map<ReportStatus, Set<ReportStatus>> ALLOWED_TRANSITIONS = new EnumMap<>(ReportStatus.class);
 
@@ -37,10 +43,15 @@ public class ReportWorkflowService {
 
     private final ReportRepository reportRepository;
     private final ReportTagRepository reportTagRepository;
+    private final GeoCodingService geoCodingService;
+    private final ReportPdfStorageService reportPdfStorageService;
 
     @Transactional
     public Report createReport(String title, String reference, ReportType type,
-                               Enterprise enterprise, Engineer engineer, BigDecimal revenueAmount) {
+                               Enterprise enterprise, Engineer engineer, BigDecimal revenueAmount,
+                               String address, String postalCode, String city) {
+        validateAddress(address, postalCode, city);
+        double[] coords = geoCodingService.resolveCoordinates(address, postalCode, city);
         Report report = Report.builder()
                 .title(title)
                 .reference(reference)
@@ -49,8 +60,54 @@ public class ReportWorkflowService {
                 .enterprise(enterprise)
                 .assignedEngineer(engineer)
                 .revenueAmount(revenueAmount)
+                .address(address.trim())
+                .postalCode(postalCode.trim())
+                .city(city.trim())
+                .latitude(coords[0])
+                .longitude(coords[1])
+                .pageCount(0)
                 .build();
         return reportRepository.save(report);
+    }
+
+    @Transactional
+    public Report updatePageCount(String reference, int pageCount) {
+        if (pageCount < 0) {
+            throw new IllegalArgumentException("Le nombre de pages ne peut pas etre negatif.");
+        }
+        Report report = findByReference(reference);
+        report.setPageCount(pageCount);
+        return reportRepository.save(report);
+    }
+
+    @Transactional
+    public Report attachPdf(String reference, MultipartFile file) {
+        Report report = findByReference(reference);
+        try {
+            if (report.getPdfStoredName() != null) {
+                reportPdfStorageService.deleteIfExists(report.getPdfStoredName());
+            }
+            String storedName = reportPdfStorageService.store(reference, file);
+            report.setPdfStoredName(storedName);
+            report.setPdfFileName(file.getOriginalFilename());
+            return reportRepository.save(report);
+        } catch (IOException ex) {
+            throw new IllegalArgumentException("Impossible d'enregistrer le PDF.");
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public ReportPdfDownload loadPdf(String reference) {
+        Report report = findByReference(reference);
+        if (report.getPdfStoredName() == null || report.getPdfStoredName().isBlank()) {
+            throw new IllegalArgumentException("Aucun PDF joint a ce rapport.");
+        }
+        try {
+            String fileName = report.getPdfFileName() != null ? report.getPdfFileName() : report.getReference() + ".pdf";
+            return new ReportPdfDownload(fileName, reportPdfStorageService.load(report.getPdfStoredName()));
+        } catch (IOException ex) {
+            throw new IllegalArgumentException("Fichier PDF introuvable.");
+        }
     }
 
     @Transactional
@@ -77,6 +134,19 @@ public class ReportWorkflowService {
                     "Transition impossible : " + current + " → " + targetStatus);
         }
 
+        if (targetStatus == ReportStatus.EN_VALIDATION) {
+            validateAddress(report.getAddress(), report.getPostalCode(), report.getCity());
+            int pages = report.getPageCount() != null ? report.getPageCount() : 0;
+            if (pages < MIN_PAGES_FOR_VALIDATION) {
+                throw new InvalidWorkflowTransitionException(
+                        "Minimum " + MIN_PAGES_FOR_VALIDATION + " pages requis pour soumettre en validation (actuel : " + pages + ").");
+            }
+            if (report.getPdfStoredName() == null || report.getPdfStoredName().isBlank()) {
+                throw new InvalidWorkflowTransitionException(
+                        "Un fichier PDF doit etre joint au rapport avant validation.");
+            }
+        }
+
         report.setStatus(targetStatus);
         LocalDateTime now = LocalDateTime.now();
         switch (targetStatus) {
@@ -86,6 +156,15 @@ public class ReportWorkflowService {
             default -> { }
         }
         return reportRepository.save(report);
+    }
+
+    @Transactional(readOnly = true)
+    public List<InterventionMapDto> interventionsMap(Long enterpriseId) {
+        return reportRepository.findByEnterpriseId(enterpriseId).stream()
+                .filter(r -> r.getLatitude() != null && r.getLongitude() != null)
+                .filter(r -> r.getAddress() != null && !r.getAddress().isBlank())
+                .map(InterventionMapDto::from)
+                .toList();
     }
 
     public Report findByReference(String reference) {
@@ -104,5 +183,17 @@ public class ReportWorkflowService {
     @Transactional(readOnly = true)
     public List<ReportDto> findKanbanBoardDto(Engineer engineer) {
         return findKanbanBoard(engineer).stream().map(ReportDto::from).toList();
+    }
+
+    private void validateAddress(String address, String postalCode, String city) {
+        if (address == null || address.isBlank()) {
+            throw new IllegalArgumentException("L'adresse est obligatoire.");
+        }
+        if (postalCode == null || postalCode.isBlank()) {
+            throw new IllegalArgumentException("Le code postal est obligatoire.");
+        }
+        if (city == null || city.isBlank()) {
+            throw new IllegalArgumentException("La ville est obligatoire.");
+        }
     }
 }

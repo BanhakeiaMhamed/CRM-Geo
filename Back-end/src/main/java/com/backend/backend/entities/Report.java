@@ -40,6 +40,31 @@ public class Report {
     @Column(length = 2000)
     private String description;
 
+    @Column(nullable = false)
+    private String address;
+
+    @Column(nullable = false, length = 10, name = "postal_code")
+    private String postalCode;
+
+    @Column(nullable = false)
+    private String city;
+
+    @Column
+    private Double latitude;
+
+    @Column
+    private Double longitude;
+
+    @Column(nullable = false, name = "page_count")
+    @Builder.Default
+    private Integer pageCount = 0;
+
+    @Column(name = "pdf_file_name")
+    private String pdfFileName;
+
+    @Column(name = "pdf_stored_name")
+    private String pdfStoredName;
+
     /** Montant facturé / bénéfice généré pour ce rapport (€). */
     @Column(precision = 12, scale = 2)
     private BigDecimal revenueAmount;

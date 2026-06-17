@@ -1,6 +1,9 @@
-﻿<nav class="navbar navbar-expand-lg custom-red-bg" *ngIf="user$ | async as user">
+﻿<nav class="navbar navbar-expand-lg crm-navbar" *ngIf="user$ | async as user">
   <div class="container-fluid">
-    <a class="navbar-brand text-white fw-bold" routerLink="/home">Bati Geo CRM</a>
+    <a class="navbar-brand fw-bold d-flex align-items-center gap-2" routerLink="/home">
+      <app-geo-logo></app-geo-logo>
+      <span>GEO CRM</span>
+    </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -8,13 +11,14 @@
       <div class="d-flex align-items-center flex-wrap gap-2 ms-auto py-2">
         <a routerLink="/home" routerLinkActive="nav-active" class="nav-link-custom">Accueil</a>
         <a routerLink="/kanban" routerLinkActive="nav-active" class="nav-link-custom">Kanban</a>
-        <a routerLink="/reports/new" routerLinkActive="nav-active" class="nav-link-custom">+ Rapport</a>
+        <a routerLink="/reports/new" routerLinkActive="nav-active" class="nav-link-custom nav-link-cta">+ Rapport</a>
         <a routerLink="/time" routerLinkActive="nav-active" class="nav-link-custom">Temps</a>
         <a routerLink="/clients" routerLinkActive="nav-active" class="nav-link-custom">Clients</a>
         <a routerLink="/engineers" routerLinkActive="nav-active" class="nav-link-custom">Equipe</a>
+        <a routerLink="/map" routerLinkActive="nav-active" class="nav-link-custom">Carte</a>
         <a routerLink="/dashboard" routerLinkActive="nav-active" class="nav-link-custom">KPI</a>
-        <span class="text-white-50 small d-none d-lg-inline">{{ user.email }}</span>
-        <button class="btn btn-sm btn-outline-light" (click)="logout()">Deconnexion</button>
+        <span class="user-email d-none d-lg-inline">{{ user.email }}</span>
+        <button class="btn btn-sm btn-logout" (click)="logout()">Deconnexion</button>
       </div>
     </div>
   </div>

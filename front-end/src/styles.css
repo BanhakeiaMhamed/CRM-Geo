@@ -1,4 +1,123 @@
-/* You can add global styles to this file, and also import other style files */
+﻿/* ===== CRM Geo — theme HubSpot ===== */
+:root {
+  --crm-primary: #ff7a59;
+  --crm-primary-hover: #ff8f73;
+  --crm-primary-dark: #e66a4a;
+  --crm-nav-bg: #2d3e50;
+  --crm-nav-text: #ffffff;
+  --crm-bg: #f5f8fa;
+  --crm-surface: #ffffff;
+  --crm-border: #cbd6e2;
+  --crm-border-light: #eaf0f6;
+  --crm-text: #33475b;
+  --crm-text-secondary: #7c98b6;
+  --crm-teal: #00a4bd;
+  --crm-teal-dark: #0091ae;
+  --crm-success: #00bda5;
+  --crm-warning: #ffc857;
+  --crm-danger: #f2547d;
+  --crm-purple: #6a78d1;
+  --crm-radius: 4px;
+  --crm-radius-lg: 8px;
+  --crm-shadow: 0 1px 3px rgba(45, 62, 80, 0.08);
+  --crm-shadow-md: 0 2px 8px rgba(45, 62, 80, 0.1);
+  --bs-primary: #ff7a59;
+  --bs-primary-rgb: 255, 122, 89;
+  --bs-link-color: #0091ae;
+  --bs-link-hover-color: #00a4bd;
+  --bs-body-bg: #f5f8fa;
+  --bs-body-color: #33475b;
+  --bs-border-color: #cbd6e2;
+}
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+body {
+  margin: 0;
+  font-family: "Lexend Deca", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  background: var(--crm-bg);
+  color: var(--crm-text);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--crm-text);
+  font-weight: 600;
+}
+
+.text-muted { color: var(--crm-text-secondary) !important; }
+
+.btn-primary {
+  --bs-btn-bg: var(--crm-primary);
+  --bs-btn-border-color: var(--crm-primary);
+  --bs-btn-hover-bg: var(--crm-primary-hover);
+  --bs-btn-hover-border-color: var(--crm-primary-hover);
+  --bs-btn-active-bg: var(--crm-primary-dark);
+  --bs-btn-active-border-color: var(--crm-primary-dark);
+  border-radius: var(--crm-radius);
+  font-weight: 500;
+}
+
+.btn-outline-primary {
+  --bs-btn-color: var(--crm-primary);
+  --bs-btn-border-color: var(--crm-primary);
+  --bs-btn-hover-bg: var(--crm-primary);
+  --bs-btn-hover-border-color: var(--crm-primary);
+  border-radius: var(--crm-radius);
+}
+
+.btn-success {
+  --bs-btn-bg: var(--crm-success);
+  --bs-btn-border-color: var(--crm-success);
+  --bs-btn-hover-bg: #00a892;
+  border-radius: var(--crm-radius);
+}
+
+.btn-warning {
+  --bs-btn-bg: var(--crm-warning);
+  --bs-btn-border-color: var(--crm-warning);
+  --bs-btn-color: var(--crm-text);
+  border-radius: var(--crm-radius);
+}
+
+.btn-outline-secondary {
+  --bs-btn-color: var(--crm-text);
+  --bs-btn-border-color: var(--crm-border);
+  --bs-btn-hover-bg: var(--crm-bg);
+  border-radius: var(--crm-radius);
+}
+
+.btn-secondary {
+  --bs-btn-bg: #7c98b6;
+  --bs-btn-border-color: #7c98b6;
+  border-radius: var(--crm-radius);
+}
+
+.spinner-border.text-primary { color: var(--crm-primary) !important; }
+
+.form-control, .form-select {
+  border-color: var(--crm-border);
+  border-radius: var(--crm-radius);
+  color: var(--crm-text);
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: var(--crm-teal);
+  box-shadow: 0 0 0 0.2rem rgba(0, 164, 189, 0.15);
+}
+
+.alert-info { background: #e5f5f8; border-color: #b6e0ea; color: var(--crm-teal-dark); }
+.alert-success { background: #e6f9f6; border-color: #b3ece3; color: #008272; }
+.alert-danger { background: #fde8ee; border-color: #f9b8c9; color: #c0392b; }
+
+.page { min-height: calc(100vh - 56px); background: var(--crm-bg); }
+
+.card-form {
+  background: var(--crm-surface);
+  border-radius: var(--crm-radius-lg);
+  padding: 1.5rem;
+  border: 1px solid var(--crm-border-light);
+  box-shadow: var(--crm-shadow);
+}
+
+.page-toolbar h1 { font-size: 1.5rem; font-weight: 600; }
+.page-toolbar .text-muted { font-size: 0.9rem; }

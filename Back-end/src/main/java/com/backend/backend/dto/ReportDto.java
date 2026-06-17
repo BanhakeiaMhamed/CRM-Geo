@@ -1,5 +1,6 @@
 package com.backend.backend.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.backend.backend.Enums.ReportStatus;
 import com.backend.backend.Enums.ReportType;
 import com.backend.backend.entities.Report;
@@ -16,7 +17,15 @@ public record ReportDto(
         ReportStatus status,
         BigDecimal revenueAmount,
         String engineerEmail,
-        List<String> tags
+        List<String> tags,
+        String address,
+        String postalCode,
+        String city,
+        Double latitude,
+        Double longitude,
+        int pageCount,
+        String pdfFileName,
+        @JsonProperty("hasPdf") boolean hasPdf
 ) {
     public static ReportDto from(Report report) {
         return new ReportDto(
@@ -27,7 +36,15 @@ public record ReportDto(
                 report.getStatus(),
                 report.getRevenueAmount(),
                 report.getAssignedEngineer().getEmail(),
-                report.getTags().stream().map(ReportTag::getLabel).toList()
+                report.getTags().stream().map(ReportTag::getLabel).toList(),
+                report.getAddress(),
+                report.getPostalCode(),
+                report.getCity(),
+                report.getLatitude(),
+                report.getLongitude(),
+                report.getPageCount() != null ? report.getPageCount() : 0,
+                report.getPdfFileName(),
+                report.getPdfStoredName() != null && !report.getPdfStoredName().isBlank()
         );
     }
 }

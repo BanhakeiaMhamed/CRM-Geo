@@ -8,6 +8,7 @@ import { ReportCreateComponent } from './reports/report-create.component';
 import { TimeTrackingComponent } from './time/time-tracking.component';
 import { ClientsComponent } from './clients/clients.component';
 import { EngineersComponent } from './engineers/engineers.component';
+import { InterventionsMapComponent } from './map/interventions-map.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -18,6 +19,7 @@ export const routes: Routes = [
   { path: 'time', component: TimeTrackingComponent, canActivate: [authGuard] },
   { path: 'clients', component: ClientsComponent, canActivate: [authGuard] },
   { path: 'engineers', component: EngineersComponent, canActivate: [authGuard] },
+  { path: 'map', component: InterventionsMapComponent, canActivate: [authGuard] },
   { path: 'dashboard', component: KpiDashboardComponent, canActivate: [authGuard] },
   { path: '**', redirectTo: 'home' }
 ];

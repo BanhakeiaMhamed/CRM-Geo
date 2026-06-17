@@ -1,17 +1,71 @@
-﻿.custom-red-bg {
-  background: linear-gradient(135deg, #1a237e, #3949ab);
+﻿.crm-navbar {
+  background: var(--crm-nav-bg);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+  padding: 0.35rem 0;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+}
+
+.navbar-brand {
+  color: var(--crm-nav-text) !important;
+  font-size: 1.05rem;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+}
+
+.navbar-brand span {
+  font-weight: 700;
+}
+
+.navbar-brand:hover {
+  color: #fff !important;
 }
 
 .nav-link-custom {
-  color: rgba(255, 255, 255, 0.85);
+  color: rgba(255, 255, 255, 0.82);
   text-decoration: none;
-  font-size: 0.9rem;
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 0.35rem 0.65rem;
+  border-radius: var(--crm-radius);
+  transition: background 0.15s, color 0.15s;
 }
 
-.nav-link-custom:hover,
-.nav-active {
+.nav-link-custom:hover {
   color: #fff;
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.1);
 }
+
+.nav-active {
+  color: #fff !important;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.nav-link-cta {
+  background: var(--crm-primary) !important;
+  color: #fff !important;
+  font-weight: 600;
+}
+
+.nav-link-cta:hover {
+  background: var(--crm-primary-hover) !important;
+  color: #fff !important;
+}
+
+.navbar-toggler { border-color: rgba(255, 255, 255, 0.4); }
+.navbar-toggler-icon { filter: invert(1); }
+
+.btn-logout {
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  color: rgba(255, 255, 255, 0.9);
+  border-radius: var(--crm-radius);
+  font-size: 0.82rem;
+  background: transparent;
+}
+
+.btn-logout:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.6);
+  color: #fff;
+}
+
+.user-email { color: rgba(255, 255, 255, 0.55); font-size: 0.78rem; }

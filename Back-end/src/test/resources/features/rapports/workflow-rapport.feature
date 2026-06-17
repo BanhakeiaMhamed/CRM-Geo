@@ -8,7 +8,7 @@ Fonctionnalité: Workflow de validation des rapports
   Contexte:
     Étant donné l'entreprise "Bati Geo Études" avec le SIRET "12345678901234"
     Et l'ingénieur "Jean Dupont" rattaché avec l'email "jean.dupont@batigeo.fr"
-    Et un rapport "RAP-2026-001" de type "ETUDE_GEOTECHNIQUE" assigné à "jean.dupont@batigeo.fr"
+    Et un rapport "RAP-2026-001" de type "G1_ES" assigné à "jean.dupont@batigeo.fr"
 
   Scénario: Parcours nominal — de l'étude à l'envoi
     Étant donné que le rapport "RAP-2026-001" est en statut "EN_COURS"

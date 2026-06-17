@@ -52,6 +52,56 @@
               <div class="kanban-card-ref">{{ report.reference }}</div>
               <div class="kanban-card-title">{{ report.title }}</div>
               <div class="kanban-card-type">{{ typeLabels[report.reportType] }}</div>
+              <div class="kanban-card-address">{{ report.address }}, {{ report.postalCode }} {{ report.city }}</div>
+              <div class="kanban-card-pages" *ngIf="col === 'EN_COURS' || col === 'EN_RECTIFICATION'">
+                <label class="pages-label">Pages : {{ pageProgress(report) }}</label>
+                <div class="input-group input-group-sm">
+                  <input type="number" class="form-control" [value]="getPageCount(report)" min="0"
+                         #pageInput (input)="onPageInput(report, pageInput.value)"
+                         (click)="$event.stopPropagation()">
+                  <button class="btn btn-outline-secondary" type="button"
+                          [disabled]="actionLoading === report.reference"
+                          (click)="savePageCount(report, pageInput.value); $event.stopPropagation()">
+                    OK
+                  </button>
+                </div>
+                <div class="validation-checklist" *ngIf="col === 'EN_COURS'">
+                  <span [class.checklist-ok]="getPageCount(report) >= minPages"
+                        [class.checklist-ko]="getPageCount(report) < minPages">
+                    {{ getPageCount(report) >= minPages ? '✓' : '✗' }} {{ minPages }} pages min.
+                  </span>
+                  <span [class.checklist-ok]="hasPdfAttached(report)"
+                        [class.checklist-ko]="!hasPdfAttached(report)">
+                    {{ hasPdfAttached(report) ? '✓' : '✗' }} PDF joint
+                  </span>
+                </div>
+              </div>
+              <div class="kanban-card-pdf">
+                <div class="pdf-label">PDF du rapport</div>
+                <div class="pdf-actions" *ngIf="hasPdfAttached(report)">
+                  <button type="button" class="btn btn-sm btn-outline-primary pdf-open-btn"
+                          (click)="openPdf(report); $event.stopPropagation()">
+                    📄 {{ report.pdfFileName || 'Voir le PDF' }}
+                  </button>
+                </div>
+                <div class="pdf-missing" *ngIf="!hasPdfAttached(report) && canUploadPdf(col)">
+                  Aucun PDF joint
+                </div>
+                <label class="btn btn-sm btn-outline-secondary pdf-upload-btn mb-0"
+                       *ngIf="canUploadPdf(col)"
+                       [class.disabled]="actionLoading === report.reference"
+                       (click)="$event.stopPropagation()">
+                  {{ hasPdfAttached(report) ? 'Remplacer PDF' : 'Joindre PDF' }}
+                  <input type="file" accept="application/pdf,.pdf" hidden
+                         [disabled]="actionLoading === report.reference"
+                         (change)="onPdfSelected(report, $event)">
+                </label>
+                <button type="button" class="btn btn-sm btn-link pdf-open-btn"
+                        *ngIf="hasPdfAttached(report) && !canUploadPdf(col)"
+                        (click)="openPdf(report); $event.stopPropagation()">
+                  Voir le PDF
+                </button>
+              </div>
               <div class="kanban-card-revenue" *ngIf="report.revenueAmount">
                 {{ report.revenueAmount | number:'1.0-0' }} €
               </div>
@@ -62,9 +112,9 @@
 
             <div class="kanban-actions">
               <button *ngIf="col === 'EN_COURS'" class="btn btn-sm btn-primary w-100"
-                      [disabled]="actionLoading === report.reference"
+                      [disabled]="actionLoading === report.reference || !canSubmitForValidation(report)"
                       (click)="submitForValidation(report)">
-                Soumettre validation
+                Soumettre validation (10 pages + PDF)
               </button>
               <button *ngIf="col === 'EN_VALIDATION'" class="btn btn-sm btn-success w-100 mb-1"
                       [disabled]="actionLoading === report.reference"

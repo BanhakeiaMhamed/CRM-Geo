@@ -8,7 +8,12 @@ import com.backend.backend.metier.services.CurrentUserService;
 import com.backend.backend.metier.services.KpiService;
 import com.backend.backend.metier.services.ReportWorkflowService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
 import java.util.EnumMap;
@@ -59,9 +64,42 @@ public class ApiController {
                 request.reportType(),
                 engineer.getEnterprise(),
                 engineer,
-                request.revenueAmount() != null ? request.revenueAmount() : java.math.BigDecimal.ZERO
+                request.revenueAmount() != null ? request.revenueAmount() : java.math.BigDecimal.ZERO,
+                request.address(),
+                request.postalCode(),
+                request.city()
         );
         return ReportDto.from(report);
+    }
+
+    @PatchMapping("/reports/{reference}/pages")
+    public ReportDto updatePages(@PathVariable String reference,
+                                 @RequestBody UpdatePageCountRequest request) {
+        Report report = reportWorkflowService.updatePageCount(reference, request.pageCount());
+        return ReportDto.from(report);
+    }
+
+    @PostMapping(value = "/reports/{reference}/pdf", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ReportDto uploadPdf(@PathVariable String reference,
+                               @RequestParam("file") MultipartFile file) {
+        Report report = reportWorkflowService.attachPdf(reference, file);
+        return ReportDto.from(report);
+    }
+
+    @GetMapping("/reports/{reference}/pdf")
+    public ResponseEntity<Resource> downloadPdf(@PathVariable String reference) {
+        ReportPdfDownload pdf = reportWorkflowService.loadPdf(reference);
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_PDF)
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "inline; filename=\"" + pdf.fileName().replace("\"", "") + "\"")
+                .body(pdf.resource());
+    }
+
+    @GetMapping("/interventions/map")
+    public List<InterventionMapDto> interventionsMap() {
+        Engineer engineer = currentUserService.getCurrentEngineer();
+        return reportWorkflowService.interventionsMap(engineer.getEnterprise().getId());
     }
 
     @PatchMapping("/reports/{reference}/transition")

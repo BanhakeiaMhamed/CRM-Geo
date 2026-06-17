@@ -1,2 +1,2 @@
-.page { min-height: calc(100vh - 56px); background: #f5f6fa; }
-.card-form { background: #fff; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08); max-width: 560px; }
+.page { min-height: calc(100vh - 56px); }
+.card-form { max-width: 560px; }

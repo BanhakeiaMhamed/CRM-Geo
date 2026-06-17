@@ -8,7 +8,7 @@ Fonctionnalité: Suivi du temps investi sur les rapports
   Contexte:
     Étant donné l'entreprise "Bati Geo Études" avec le SIRET "12345678901234"
     Et l'ingénieur "Jean Dupont" rattaché avec l'email "jean.dupont@batigeo.fr"
-    Et un rapport "RAP-TM-001" de type "ETUDE_GEOTECHNIQUE" assigné à "jean.dupont@batigeo.fr"
+    Et un rapport "RAP-TM-001" de type "G1_ES" assigné à "jean.dupont@batigeo.fr"
 
   Scénario: Saisie de temps sur un rapport en cours
     Quand l'ingénieur "jean.dupont@batigeo.fr" enregistre 3,5 heures sur le rapport "RAP-TM-001" le "2026-06-10"

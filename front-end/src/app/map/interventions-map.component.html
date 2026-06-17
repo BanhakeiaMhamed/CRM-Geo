@@ -1,0 +1,41 @@
+<div class="page">
+  <div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-3 page-toolbar">
+      <div>
+        <h1 class="mb-1">Carte des interventions</h1>
+        <p class="text-muted mb-0">Toutes nos missions geotechniques par adresse (rue, CP, ville)</p>
+      </div>
+      <a routerLink="/home" class="btn btn-outline-secondary btn-sm">← Accueil</a>
+    </div>
+
+    <div class="alert alert-danger" *ngIf="error">{{ error }}</div>
+
+    <div class="text-center py-5" *ngIf="loading">
+      <div class="spinner-border text-primary"></div>
+    </div>
+
+    <div class="map-layout" *ngIf="!loading && !error">
+      <div class="map-panel">
+        <div #mapContainer class="map-container"></div>
+      </div>
+
+      <div class="list-panel card-form">
+        <h5 class="mb-3">{{ interventions.length }} intervention(s)</h5>
+        <div class="intervention-item"
+             *ngFor="let item of interventions"
+             [class.intervention-item--active]="selected?.reference === item.reference"
+             (click)="selectItem(item)">
+          <div class="item-ref">{{ item.reference }}</div>
+          <div class="item-title">{{ item.title }}</div>
+          <div class="item-type">{{ typeLabels[item.reportType] }}</div>
+          <div class="item-address">{{ item.address }}, {{ item.postalCode }} {{ item.city }}</div>
+          <div class="item-meta">
+            <span class="badge-status">{{ statusLabels[item.status] }}</span>
+            <span>{{ item.engineerFirstName }} {{ item.engineerLastName }}</span>
+          </div>
+        </div>
+        <p class="text-muted mb-0" *ngIf="interventions.length === 0">Aucune intervention localisee.</p>
+      </div>
+    </div>
+  </div>
+</div>

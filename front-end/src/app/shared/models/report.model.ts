@@ -3,8 +3,13 @@ export type ReportStatus =
   | 'EN_RECTIFICATION' | 'ENVOYE' | 'CLOTURE';
 
 export type ReportType =
-  | 'ETUDE_GEOTECHNIQUE' | 'ETUDE_STRUCTURE' | 'DIAGNOSTIC'
-  | 'AUDIT_ENERGETIQUE' | 'EXPERTISE' | 'AUTRE';
+  | 'G1_ES' | 'G1_PGC'
+  | 'G2_AVP' | 'G2_PRO' | 'G2_DCE_ACT'
+  | 'G3_PHASE_ETUDE' | 'G3_PHASE_SUIVI'
+  | 'G4_SUPERVISION_ETUDE' | 'G4_SUPERVISION_SUIVI'
+  | 'G5_DIAGNOSTIC';
+
+export const MIN_PAGES_FOR_VALIDATION = 10;
 
 export interface Report {
   id: number;
@@ -15,6 +20,29 @@ export interface Report {
   revenueAmount: number;
   engineerEmail: string;
   tags: string[];
+  address: string;
+  postalCode: string;
+  city: string;
+  latitude?: number;
+  longitude?: number;
+  pageCount: number;
+  pdfFileName?: string;
+  hasPdf: boolean;
+}
+
+export interface InterventionMapItem {
+  reference: string;
+  title: string;
+  reportType: ReportType;
+  status: ReportStatus;
+  address: string;
+  postalCode: string;
+  city: string;
+  latitude: number;
+  longitude: number;
+  pageCount: number;
+  engineerFirstName: string;
+  engineerLastName: string;
 }
 
 export interface UserProfile {
@@ -49,11 +77,11 @@ export const KPI_STATUS_KEYS: ReportStatus[] = [
 ];
 
 export const KPI_STATUS_COLORS: Partial<Record<ReportStatus, string>> = {
-  EN_COURS: '#3949ab',
-  EN_VALIDATION: '#fb8c00',
-  VALIDE: '#43a047',
-  ENVOYE: '#00897b',
-  CLOTURE: '#546e7a'
+  EN_COURS: '#FF7A59',
+  EN_VALIDATION: '#FFC857',
+  VALIDE: '#00BDA5',
+  ENVOYE: '#6A78D1',
+  CLOTURE: '#7C98B6'
 };
 
 export interface MonthlyRevenue {
@@ -87,15 +115,15 @@ export interface DashboardBenefits {
   engineers: EngineerBenefit[];
 }
 
-export const ENGINEER_CHART_COLORS = ['#3949ab', '#00897b', '#fb8c00', '#e53935', '#8e24aa'];
+export const ENGINEER_CHART_COLORS = ['#FF7A59', '#00BDA5', '#6A78D1', '#FFC857', '#F2547D'];
 
 export const COLUMN_COLORS: Partial<Record<ReportStatus, string>> = {
-  EN_COURS: '#3949ab',
-  EN_VALIDATION: '#fb8c00',
-  EN_RECTIFICATION: '#e53935',
-  VALIDE: '#43a047',
-  ENVOYE: '#00897b',
-  CLOTURE: '#546e7a'
+  EN_COURS: '#FF7A59',
+  EN_VALIDATION: '#FFC857',
+  EN_RECTIFICATION: '#F2547D',
+  VALIDE: '#00BDA5',
+  ENVOYE: '#6A78D1',
+  CLOTURE: '#7C98B6'
 };
 
 export const STATUS_LABELS: Record<ReportStatus, string> = {
@@ -109,13 +137,45 @@ export const STATUS_LABELS: Record<ReportStatus, string> = {
 };
 
 export const TYPE_LABELS: Record<ReportType, string> = {
-  ETUDE_GEOTECHNIQUE: 'Etude geotechnique',
-  ETUDE_STRUCTURE: 'Etude structure',
-  DIAGNOSTIC: 'Diagnostic',
-  AUDIT_ENERGETIQUE: 'Audit energetique',
-  EXPERTISE: 'Expertise',
-  AUTRE: 'Autre'
+  G1_ES: 'G1 ES — Etude de Site',
+  G1_PGC: 'G1 PGC — Principes Generaux de Construction',
+  G2_AVP: 'G2 AVP — Avant-Projet',
+  G2_PRO: 'G2 PRO — Projet',
+  G2_DCE_ACT: 'G2 DCE/ACT — Consultation / Assistance contrats',
+  G3_PHASE_ETUDE: 'G3 — Phase Etude',
+  G3_PHASE_SUIVI: 'G3 — Phase Suivi',
+  G4_SUPERVISION_ETUDE: 'G4 — Supervision etude d\'execution',
+  G4_SUPERVISION_SUIVI: 'G4 — Supervision suivi d\'execution',
+  G5_DIAGNOSTIC: 'G5 — Diagnostic geotechnique'
 };
+
+export interface ReportTypeGroup {
+  label: string;
+  types: ReportType[];
+}
+
+export const REPORT_TYPE_GROUPS: ReportTypeGroup[] = [
+  {
+    label: 'G1 — Etude geotechnique prealable',
+    types: ['G1_ES', 'G1_PGC']
+  },
+  {
+    label: 'G2 — Etude geotechnique de conception',
+    types: ['G2_AVP', 'G2_PRO', 'G2_DCE_ACT']
+  },
+  {
+    label: 'G3 — Etude et suivi geotechniques d\'execution',
+    types: ['G3_PHASE_ETUDE', 'G3_PHASE_SUIVI']
+  },
+  {
+    label: 'G4 — Supervision geotechnique d\'execution',
+    types: ['G4_SUPERVISION_ETUDE', 'G4_SUPERVISION_SUIVI']
+  },
+  {
+    label: 'G5 — Diagnostic geotechnique',
+    types: ['G5_DIAGNOSTIC']
+  }
+];
 
 export type ClientType = 'PARTICULIER' | 'PROFESSIONAL';
 

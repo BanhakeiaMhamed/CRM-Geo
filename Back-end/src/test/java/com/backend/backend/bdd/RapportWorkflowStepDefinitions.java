@@ -49,8 +49,12 @@ public class RapportWorkflowStepDefinitions {
                 ReportType.valueOf(type),
                 engineer.getEnterprise(),
                 engineer,
-                revenue != null ? revenue : BigDecimal.ZERO
+                revenue != null ? revenue : BigDecimal.ZERO,
+                "10 rue de la Republique",
+                "69002",
+                "Lyon"
         );
+        report.setPageCount(ReportWorkflowService.MIN_PAGES_FOR_VALIDATION);
         if (!ReportStatus.EN_COURS.name().equals(status)) {
             report.setStatus(ReportStatus.valueOf(status));
             report = reportRepository.save(report);

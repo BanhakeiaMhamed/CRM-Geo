@@ -35,6 +35,7 @@ public class DemoDataService {
     private final ClientRepository clientRepository;
     private final TimeEntryRepository timeEntryRepository;
     private final ReportWorkflowService reportWorkflowService;
+    private final GeoCodingService geoCodingService;
     private final JdbcTemplate jdbcTemplate;
 
     @Transactional
@@ -58,34 +59,47 @@ public class DemoDataService {
         Engineer sophie = ensureEngineer(enterprise, "Sophie", "Bernard", "sbernard@batigeo.fr", "sbernard", Role.INGENIEUR);
         ensureEngineer(enterprise, "Gerard", "Martin", "gerant@batigeo.fr", "gmartin", Role.GERANT);
 
-        seedKpiReport(marie, enterprise, "RAP-KPI-001", "Etude geotechnique Lot A",
-                ReportType.ETUDE_GEOTECHNIQUE, ReportStatus.EN_COURS, "3200", null);
-        seedKpiReport(marie, enterprise, "RAP-KPI-002", "Diagnostic structure batiment B",
-                ReportType.DIAGNOSTIC, ReportStatus.EN_VALIDATION, "2800", null);
-        seedKpiReport(marie, enterprise, "RAP-KPI-003", "Expertise fissures facade",
-                ReportType.EXPERTISE, ReportStatus.EN_RECTIFICATION, "1900", null);
-        seedKpiReport(marie, enterprise, "RAP-KPI-004", "Audit energetique immeuble C",
-                ReportType.AUDIT_ENERGETIQUE, ReportStatus.VALIDE, "5100", null);
-        seedKpiReport(marie, enterprise, "RAP-KPI-005", "Etude structure parking",
-                ReportType.ETUDE_STRUCTURE, ReportStatus.ENVOYE, "5100", Month.JANUARY);
-        seedKpiReport(marie, enterprise, "RAP-KPI-006", "Fondations immeuble E",
-                ReportType.ETUDE_GEOTECHNIQUE, ReportStatus.CLOTURE, "7200", Month.MARCH);
+        seedKpiReport(marie, enterprise, "RAP-KPI-001", "G1 ES — Lotissement Les Oliviers",
+                ReportType.G1_ES, ReportStatus.EN_COURS, "3200", null,
+                "45 avenue Jean Jaures", "69007", "Lyon", 7);
+        seedKpiReport(marie, enterprise, "RAP-KPI-002", "G1 PGC — Immeuble de bureaux B",
+                ReportType.G1_PGC, ReportStatus.EN_VALIDATION, "2800", null,
+                "12 rue de la Charite", "69002", "Lyon", 14);
+        seedKpiReport(marie, enterprise, "RAP-KPI-003", "G2 AVP — Extension usine Nord",
+                ReportType.G2_AVP, ReportStatus.EN_RECTIFICATION, "1900", null,
+                "8 rue Garibaldi", "69006", "Lyon", 11);
+        seedKpiReport(marie, enterprise, "RAP-KPI-004", "G2 PRO — Parking souterrain C",
+                ReportType.G2_PRO, ReportStatus.VALIDE, "5100", null,
+                "22 cours Lafayette", "69003", "Lyon", 18);
+        seedKpiReport(marie, enterprise, "RAP-KPI-005", "G2 DCE/ACT — Voirie secteur Est",
+                ReportType.G2_DCE_ACT, ReportStatus.ENVOYE, "5100", Month.JANUARY,
+                "5 place Bellecour", "69002", "Lyon", 22);
+        seedKpiReport(marie, enterprise, "RAP-KPI-006", "G3 Phase Etude — Fondations immeuble E",
+                ReportType.G3_PHASE_ETUDE, ReportStatus.CLOTURE, "7200", Month.MARCH,
+                "18 rue Paul Bert", "69100", "Villeurbanne", 26);
 
-        seedKpiReport(thomas, enterprise, "RAP-KPI-007", "Controle portique metallique",
-                ReportType.ETUDE_STRUCTURE, ReportStatus.EN_COURS, "4100", null);
-        seedKpiReport(thomas, enterprise, "RAP-KPI-008", "Rapport sols zone industrielle",
-                ReportType.ETUDE_GEOTECHNIQUE, ReportStatus.EN_VALIDATION, "3600", null);
-        seedKpiReport(thomas, enterprise, "RAP-KPI-009", "Diagnostic charpente hangar",
-                ReportType.DIAGNOSTIC, ReportStatus.ENVOYE, "5400", Month.FEBRUARY);
-        seedKpiReport(thomas, enterprise, "RAP-KPI-010", "Expertise infiltrations",
-                ReportType.EXPERTISE, ReportStatus.CLOTURE, "4800", Month.APRIL);
+        seedKpiReport(thomas, enterprise, "RAP-KPI-007", "G3 Phase Suivi — Portique metallique",
+                ReportType.G3_PHASE_SUIVI, ReportStatus.EN_COURS, "4100", null,
+                "Zone industrielle Nord, bat. C", "69100", "Villeurbanne", 5);
+        seedKpiReport(thomas, enterprise, "RAP-KPI-008", "G1 ES — Zone industrielle Sud",
+                ReportType.G1_ES, ReportStatus.EN_VALIDATION, "3600", null,
+                "140 avenue Henri Barbusse", "69100", "Villeurbanne", 15);
+        seedKpiReport(thomas, enterprise, "RAP-KPI-009", "G4 Supervision etude — Hangar logistique",
+                ReportType.G4_SUPERVISION_ETUDE, ReportStatus.ENVOYE, "5400", Month.FEBRUARY,
+                "Chemin de la Mouche", "69200", "Venissieux", 20);
+        seedKpiReport(thomas, enterprise, "RAP-KPI-010", "G4 Supervision suivi — Ouvrage de stockage",
+                ReportType.G4_SUPERVISION_SUIVI, ReportStatus.CLOTURE, "4800", Month.APRIL,
+                "25 rue Marcel Merieux", "69200", "Venissieux", 24);
 
-        seedKpiReport(sophie, enterprise, "RAP-KPI-011", "Etude fondations villa",
-                ReportType.ETUDE_GEOTECHNIQUE, ReportStatus.VALIDE, "2900", null);
-        seedKpiReport(sophie, enterprise, "RAP-KPI-012", "Audit thermique immeuble D",
-                ReportType.AUDIT_ENERGETIQUE, ReportStatus.ENVOYE, "6200", Month.MAY);
-        seedKpiReport(sophie, enterprise, "RAP-KPI-013", "Rapport stabilite talus",
-                ReportType.ETUDE_GEOTECHNIQUE, ReportStatus.CLOTURE, "3900", Month.JUNE);
+        seedKpiReport(sophie, enterprise, "RAP-KPI-011", "G2 PRO — Fondations villa",
+                ReportType.G2_PRO, ReportStatus.VALIDE, "2900", null,
+                "7 impasse des Lilas", "69300", "Caluire-et-Cuire", 16);
+        seedKpiReport(sophie, enterprise, "RAP-KPI-012", "G3 Phase Suivi — Immeuble D",
+                ReportType.G3_PHASE_SUIVI, ReportStatus.ENVOYE, "6200", Month.MAY,
+                "3 montee de la Grande Cote", "69001", "Lyon", 19);
+        seedKpiReport(sophie, enterprise, "RAP-KPI-013", "G5 Diagnostic — Stabilite talus",
+                ReportType.G5_DIAGNOSTIC, ReportStatus.CLOTURE, "3900", Month.JUNE,
+                "Route de Vourles", "69600", "Oullins", 21);
 
         seedDemoClients(marie, thomas);
         seedDemoTimeEntries(marie, "RAP-KPI-001", "RAP-KPI-005");
@@ -95,6 +109,8 @@ public class DemoDataService {
         engineerRepository.findByEnterpriseId(enterprise.getId())
                 .forEach(this::fillMissingTimeEntries);
 
+        refreshOrphanReportLocations(enterprise);
+
         log.info("Donnees de demo injectees pour {}.", DEMO_ENTERPRISE);
     }
 
@@ -102,18 +118,24 @@ public class DemoDataService {
     @Transactional
     public void seedUserDemoData(Engineer engineer, Enterprise enterprise) {
         if (reportRepository.findByAssignedEngineer(engineer).isEmpty()) {
-            seedKpiReport(engineer, enterprise, "RAP-USER-001", "Etude geotechnique Lot A",
-                    ReportType.ETUDE_GEOTECHNIQUE, ReportStatus.EN_COURS, "4500", null);
-            seedKpiReport(engineer, enterprise, "RAP-USER-002", "Diagnostic structure batiment B",
-                    ReportType.DIAGNOSTIC, ReportStatus.EN_VALIDATION, "2800", null);
-            seedKpiReport(engineer, enterprise, "RAP-USER-003", "Expertise fissures facade",
-                    ReportType.EXPERTISE, ReportStatus.EN_RECTIFICATION, "1900", null);
-            seedKpiReport(engineer, enterprise, "RAP-USER-004", "Audit energetique immeuble C",
-                    ReportType.AUDIT_ENERGETIQUE, ReportStatus.VALIDE, "5100", null);
-            seedKpiReport(engineer, enterprise, "RAP-USER-005", "Etude structure parking",
-                    ReportType.ETUDE_STRUCTURE, ReportStatus.ENVOYE, "7200", Month.JANUARY);
-            seedKpiReport(engineer, enterprise, "RAP-USER-006", "Controle fondations parking P2",
-                    ReportType.ETUDE_GEOTECHNIQUE, ReportStatus.CLOTURE, "3400", Month.FEBRUARY);
+            seedKpiReport(engineer, enterprise, "RAP-USER-001", "G1 ES — Etude de site Lot A",
+                    ReportType.G1_ES, ReportStatus.EN_COURS, "4500", null,
+                    "10 rue Victor Hugo", "69002", "Lyon", 6);
+            seedKpiReport(engineer, enterprise, "RAP-USER-002", "G1 PGC — Batiment B",
+                    ReportType.G1_PGC, ReportStatus.EN_VALIDATION, "2800", null,
+                    "34 rue de la Part-Dieu", "69003", "Lyon", 13);
+            seedKpiReport(engineer, enterprise, "RAP-USER-003", "G2 AVP — Fissures facade",
+                    ReportType.G2_AVP, ReportStatus.EN_RECTIFICATION, "1900", null,
+                    "6 rue Moncey", "69003", "Lyon", 12);
+            seedKpiReport(engineer, enterprise, "RAP-USER-004", "G2 PRO — Immeuble C",
+                    ReportType.G2_PRO, ReportStatus.VALIDE, "5100", null,
+                    "15 quai Rambaud", "69002", "Lyon", 17);
+            seedKpiReport(engineer, enterprise, "RAP-USER-005", "G3 Phase Etude — Parking",
+                    ReportType.G3_PHASE_ETUDE, ReportStatus.ENVOYE, "7200", Month.JANUARY,
+                    "2 place des Jacobins", "69002", "Lyon", 23);
+            seedKpiReport(engineer, enterprise, "RAP-USER-006", "G5 Diagnostic — Fondations P2",
+                    ReportType.G5_DIAGNOSTIC, ReportStatus.CLOTURE, "3400", Month.FEBRUARY,
+                    "88 avenue Jean Jaures", "69100", "Villeurbanne", 25);
         }
         if (clientRepository.findByEnterpriseId(enterprise.getId()).isEmpty()) {
             seedDemoClients(engineer, engineer);
@@ -147,18 +169,71 @@ public class DemoDataService {
                         .build()));
     }
 
+    private static final String DEFAULT_MIGRATION_ADDRESS = "10 rue de la Republique";
+
     private void seedKpiReport(Engineer engineer, Enterprise enterprise, String reference, String title,
-                               ReportType type, ReportStatus status, String revenue, Month sentMonth) {
-        if (reportRepository.findByReference(reference).isPresent()) {
-            return;
+                               ReportType type, ReportStatus status, String revenue, Month sentMonth,
+                               String address, String postalCode, String city, int pageCount) {
+        reportRepository.findByReference(reference).ifPresentOrElse(existing -> {
+            applyLocation(existing, address, postalCode, city);
+            existing.setPageCount(pageCount);
+            if (sentMonth != null) {
+                existing.setSentAt(LocalDateTime.of(2026, sentMonth, 15, 10, 0));
+            }
+            reportRepository.save(existing);
+        }, () -> {
+            Report report = reportWorkflowService.createReport(
+                    title, reference, type, enterprise, engineer, new BigDecimal(revenue),
+                    address, postalCode, city);
+            report.setStatus(status);
+            report.setPageCount(pageCount);
+            if (sentMonth != null) {
+                report.setSentAt(LocalDateTime.of(2026, sentMonth, 15, 10, 0));
+            }
+            reportRepository.save(report);
+        });
+    }
+
+    /** Reassigne les rapports encore sur l'adresse par defaut de migration. */
+    private void refreshOrphanReportLocations(Enterprise enterprise) {
+        List<String[]> locations = List.of(
+                new String[]{"14 rue Auguste Comte", "69002", "Lyon"},
+                new String[]{"27 rue de la Thibaudiere", "69007", "Lyon"},
+                new String[]{"9 rue Dugas-Montbel", "69005", "Lyon"},
+                new String[]{"41 avenue Berthelot", "69007", "Lyon"},
+                new String[]{"3 rue de Bonnel", "69003", "Lyon"},
+                new String[]{"56 rue Garibaldi", "69006", "Lyon"},
+                new String[]{"11 rue Anatole France", "69100", "Villeurbanne"},
+                new String[]{"67 rue Marceau", "28700", "Auneau"},
+                new String[]{"120 boulevard Pinel", "69008", "Lyon"},
+                new String[]{"4 rue de la Part-Dieu", "69003", "Lyon"},
+                new String[]{"19 rue de la Republique", "69200", "Venissieux"},
+                new String[]{"6 chemin de la Ferme", "69300", "Caluire-et-Cuire"},
+                new String[]{"2 place Antonin Poncet", "69002", "Lyon"},
+                new String[]{"31 rue du Dauphine", "69003", "Lyon"},
+                new String[]{"8 rue de Cuire", "69004", "Lyon"}
+        );
+
+        var orphans = reportRepository.findByEnterpriseId(enterprise.getId()).stream()
+                .filter(r -> r.getAddress() == null
+                        || r.getAddress().isBlank()
+                        || r.getAddress().startsWith(DEFAULT_MIGRATION_ADDRESS))
+                .toList();
+
+        for (int i = 0; i < orphans.size(); i++) {
+            String[] loc = locations.get(i % locations.size());
+            applyLocation(orphans.get(i), loc[0], loc[1], loc[2]);
+            reportRepository.save(orphans.get(i));
         }
-        Report report = reportWorkflowService.createReport(
-                title, reference, type, enterprise, engineer, new BigDecimal(revenue));
-        report.setStatus(status);
-        if (sentMonth != null) {
-            report.setSentAt(LocalDateTime.of(2026, sentMonth, 15, 10, 0));
-        }
-        reportRepository.save(report);
+    }
+
+    private void applyLocation(Report report, String address, String postalCode, String city) {
+        double[] coords = geoCodingService.resolveCoordinates(address, postalCode, city);
+        report.setAddress(address);
+        report.setPostalCode(postalCode);
+        report.setCity(city);
+        report.setLatitude(coords[0]);
+        report.setLongitude(coords[1]);
     }
 
     private void seedDemoClients(Engineer owner1, Engineer owner2) {

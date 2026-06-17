@@ -7,6 +7,7 @@ import {
   DashboardBenefits,
   DashboardOverview,
   EngineerSummary,
+  InterventionMapItem,
   PeriodFilter,
   Report,
   ReportStatus,
@@ -59,8 +60,29 @@ export class CrmApiService {
     reference: string;
     reportType: ReportType;
     revenueAmount?: number;
+    address: string;
+    postalCode: string;
+    city: string;
   }): Observable<Report> {
     return this.http.post<Report>(`${this.baseUrl}/api/reports`, data);
+  }
+
+  updatePageCount(reference: string, pageCount: number): Observable<Report> {
+    return this.http.patch<Report>(`${this.baseUrl}/api/reports/${reference}/pages`, { pageCount });
+  }
+
+  getInterventionsMap(): Observable<InterventionMapItem[]> {
+    return this.http.get<InterventionMapItem[]>(`${this.baseUrl}/api/interventions/map`);
+  }
+
+  uploadReportPdf(reference: string, file: File): Observable<Report> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<Report>(`${this.baseUrl}/api/reports/${reference}/pdf`, formData);
+  }
+
+  downloadReportPdf(reference: string): Observable<Blob> {
+    return this.http.get(`${this.baseUrl}/api/reports/${reference}/pdf`, { responseType: 'blob' });
   }
 
   getTimeEntries(): Observable<TimeEntry[]> {
