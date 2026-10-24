@@ -1,0 +1,40 @@
+13:22:31.988 [restartedMain] INFO  com.backend.backend.BackEndApplication - Starting BackEndApplication using Java 17.0.10 with PID 31928 (C:\Users\banha\Desktop\workspace\CRM-Geo\Back-end\target\classes started by Aghyor in C:\Users\banha\Desktop\workspace\CRM-Geo)
+13:22:31.998 [restartedMain] INFO  com.backend.backend.BackEndApplication - No active profile set, falling back to 1 default profile: "default"
+13:22:33.750 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+13:22:33.844 [restartedMain] INFO  org.springframework.data.repository.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 85 ms. Found 8 JPA repository interfaces.
+13:22:34.667 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
+13:22:34.669 [restartedMain] INFO  org.apache.catalina.core.StandardService - Starting service [Tomcat]
+13:22:34.669 [restartedMain] INFO  org.apache.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.26]
+13:22:34.762 [restartedMain] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+13:22:34.961 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+13:22:35.939 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@148a7970
+13:22:35.943 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+13:22:36.240 [restartedMain] INFO  liquibase.database - Set default schema name to public
+13:22:36.921 [restartedMain] INFO  liquibase.changelog - Reading from public.databasechangelog
+13:22:36.982 [restartedMain] INFO  liquibase.ui - Database is up to date, no changesets to execute
+13:22:36.985 [restartedMain] INFO  liquibase.changelog - Reading from public.databasechangelog
+13:22:36.997 [restartedMain] INFO  liquibase.util - UPDATE SUMMARY
+13:22:36.997 [restartedMain] INFO  liquibase.util - Run:                          0
+13:22:36.997 [restartedMain] INFO  liquibase.util - Previously run:               7
+13:22:36.997 [restartedMain] INFO  liquibase.util - Filtered out:                 0
+13:22:36.997 [restartedMain] INFO  liquibase.util - -------------------------------
+13:22:36.997 [restartedMain] INFO  liquibase.util - Total change sets:            7
+13:22:36.998 [restartedMain] INFO  liquibase.util - Update summary generated
+13:22:37.046 [restartedMain] INFO  liquibase.lockservice - Successfully released change log lock
+13:22:37.049 [restartedMain] INFO  liquibase.command - Command execution complete
+13:22:37.173 [restartedMain] INFO  org.hibernate.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+13:22:37.319 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.2.Final
+13:22:37.380 [restartedMain] INFO  org.hibernate.cache.internal.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+13:22:37.884 [restartedMain] INFO  org.springframework.orm.jpa.persistenceunit.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+13:22:37.959 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+13:22:39.596 [restartedMain] INFO  org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+13:22:39.864 [restartedMain] INFO  org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+13:22:40.269 [restartedMain] INFO  org.springframework.data.jpa.repository.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+13:22:41.064 [restartedMain] INFO  com.backend.backend.configurations.FirebaseConfig - Firebase Admin SDK initialise.
+13:22:41.284 [restartedMain] INFO  org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+13:22:42.050 [restartedMain] INFO  org.apache.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
+13:22:42.072 [restartedMain] INFO  com.backend.backend.BackEndApplication - Started BackEndApplication in 10.579 seconds (process running for 27.871)
+13:22:42.418 [restartedMain] INFO  com.backend.backend.metier.services.DemoDataService - Donnees de demo injectees pour Bati Geo Études.
+13:31:52.674 [http-nio-8081-exec-1] INFO  org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+13:31:52.674 [http-nio-8081-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+13:31:52.675 [http-nio-8081-exec-1] INFO  org.springframework.web.servlet.DispatcherServlet - Completed initialization in 1 ms
