@@ -5,5 +5,5 @@ ciPipeline(
     language: 'java',
     version: '17',
     repoUrl: 'https://github.com/BanhakeiaMhamed/CRM-Geo.git',
-    branch: 'master'
+    branch: 'NOM_DE_TA_BRANCHE'
 )
