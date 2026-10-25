@@ -47,6 +47,10 @@ databaseChangeLog:
             columnName: firstName
       changes:
         - sql:
+            sql: ALTER TABLE users ADD COLUMN IF NOT EXISTS first_name varchar(255)
+        - sql:
+            sql: ALTER TABLE users ADD COLUMN IF NOT EXISTS last_name varchar(255)
+        - sql:
             sql: UPDATE users SET first_name = "firstName" WHERE first_name IS NULL AND "firstName" IS NOT NULL
         - sql:
             sql: UPDATE users SET last_name = "lastName" WHERE last_name IS NULL AND "lastName" IS NOT NULL
